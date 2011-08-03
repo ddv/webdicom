@@ -1,0 +1,2 @@
+serviceClass: org.psystems.dicom.browser.client.service.ManageStydyService
+path: EB85C42BDFF0E88BB8927385524EE08D.gwt.rpc

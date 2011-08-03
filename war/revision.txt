@@ -1,0 +1,11 @@
+Path: .
+URL: https://web-dicom.googlecode.com/svn/trunk/dicom-browser/src
+Repository Root: https://web-dicom.googlecode.com/svn
+Repository UUID: 0910c928-f3b2-11de-a89a-43a960051dd3
+Revision: 903
+Node Kind: directory
+Schedule: normal
+Last Changed Author: derenok
+Last Changed Rev: 903
+Last Changed Date: 2011-07-14 00:51:47 +0600 (Чт, 14 июл 2011)
+

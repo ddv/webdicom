@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+
+	<!-- ************************************************* -->
+	<!-- ***     Конфигурационные параметры            *** -->
+	<!-- ************************************************* -->
+
+	<!-- Коннекторы к БД -->
+
+	<!-- БД проекта web-dicom -->
+	<resource-ref>
+	<description>Project derby main connector</description>
+		<res-ref-name>jdbc/webdicom</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+	</resource-ref>
+
+
+	<context-param>
+		<param-name>webdicom.connection.main.url</param-name>
+		<param-value>jdbc:derby://localhost:1527//DICOM/DB/WEBDICOM</param-value>
+	</context-param>
+
+	<!-- БД проекта ОМИТЦ -->
+
+	<resource-ref>
+		<description>OMITS Oracle connector</description>
+		<res-ref-name>jdbc/omits</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+	</resource-ref>
+	
+	<context-param>
+		<param-name>webdicom.connection.omits.driver</param-name>
+		<param-value>oracle.jdbc.driver.OracleDriver</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>webdicom.connection.omits.url</param-name>
+		<param-value>jdbc:oracle:thin:DICOM_USER/EPy8jC5l@localhost:30001:SRGP1</param-value>
+	</context-param>
+	
+	
+
+
+	<!-- Прочие настройки -->
+
+	<!-- Корневая папка файлов исследований -->
+	<context-param>
+		<param-name>webdicom.dir.src</param-name>
+		<param-value>../../dicom-archive/database/instance/dcm.data</param-value>
+	</context-param>
+
+	<!--
+		??? Очевидно это папка с картинками ??? TODO Переименовать в image...
+	-->
+	<context-param>
+		<param-name>webdicom.dir.dst</param-name>
+		<param-value>../../dicom-archive/database/instance/dcm.data</param-value>
+	</context-param>
+
+	<!-- Директория для сохранения временных заугружаемых картинок -->
+	<context-param>
+		<param-name>webdicom.dir.newdcm.uploadimages</param-name>
+		<param-value>../tmp</param-value>
+	</context-param>
+
+	<!-- Директория для сохранения временных DCM-файлов  -->
+	<context-param>
+		<param-name>webdicom.dir.newdcm.tmp</param-name>
+		<param-value>../tmp</param-value>
+	</context-param>
+	
+	<!-- Директория с шаблонами openoffice  -->
+	<context-param>
+		<param-name>webdicom.dir.ootmpl</param-name>
+		<param-value>../test/ootmpl</param-value>
+	</context-param>
+
+	
+	<!-- строка соединения с Dicom-архивом для передачи DCM-файлов  -->
+	<context-param>
+		<param-name>webdicom.archive.connection</param-name>
+		<param-value>DDV@localhost:11112</param-value>
+	</context-param>
+
+	<!-- Конфиг-прототип для создания JPG - DCM-файлов  -->
+	<context-param>
+		<param-name>webdicom.dir.newdcm.jpg.cfg</param-name>
+		<param-value>../test/data/jpg2dcm.cfg</param-value>
+	</context-param>
+
+	<!-- Конфиг-прототип для создания DFP - DCM-файлов  -->
+	<context-param>
+		<param-name>webdicom.dir.newdcm.pdf.cfg</param-name>
+		<param-value>../test/data/pdf2dcm.cfg</param-value>
+	</context-param>
+
+	
+
+
+	<!-- ************************************************* -->
+	<!-- ***     Страница по умолчанию                 *** -->
+	<!-- ************************************************* -->
+
+	<welcome-file-list>
+		<welcome-file>Browser.html</welcome-file>
+	</welcome-file-list>
+
+
+	<!-- ************************************************* -->
+	<!-- ***                  СЕРВЛЕТЫ                 *** -->
+	<!-- ************************************************* -->
+
+	<!--   СЕРВЛЕТЫ - Имплементаторы GWT-RPC сервисов    -->
+
+	<servlet>
+		<servlet-name>browserServlet</servlet-name>
+		<servlet-class>org.psystems.dicom.browser.server.BrowserServiceImpl</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>browserServlet</servlet-name>
+		<url-pattern>/browser/browser</url-pattern>
+	</servlet-mapping>
+
+
+
+	<servlet>
+		<servlet-name>suggestServlet</servlet-name>
+		<servlet-class>org.psystems.dicom.browser.server.ItemSuggestServiceImpl</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>suggestServlet</servlet-name>
+		<url-pattern>/browser/services/itemsuggestservice</url-pattern>
+	</servlet-mapping>
+	
+	
+	<servlet>
+		<servlet-name>dicSuggestServlet</servlet-name>
+		<servlet-class>org.psystems.dicom.browser.server.DicSuggestBoxServiceImpl</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>dicSuggestServlet</servlet-name>
+		<url-pattern>/browser/services/dicsuggest</url-pattern>
+	</servlet-mapping>
+	
+
+	<!--   СЕРВЛЕТЫ ???    -->
+
+	<servlet>
+		<servlet-name>attachementServlet</servlet-name>
+		<servlet-class>org.psystems.dicom.browser.server.AttachementServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+
+		<init-param>
+			<param-name>teamColor</param-name>
+			<param-value>red</param-value>
+		</init-param>
+
+	</servlet>
+
+
+	<servlet-mapping>
+		<servlet-name>attachementServlet</servlet-name>
+		<url-pattern>/images/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>dcmAttachementServlet</servlet-name>
+		<servlet-class>org.psystems.dicom.browser.server.DcmAttachementServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+
+		<init-param>
+			<param-name>teamColor</param-name>
+			<param-value>red</param-value>
+		</init-param>
+
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>dcmAttachementServlet</servlet-name>
+		<url-pattern>/dcm/*</url-pattern>
+	</servlet-mapping>
+
+
+
+	<servlet>
+		<servlet-name>DcmViewTagsServlet</servlet-name>
+		<servlet-class>org.psystems.dicom.browser.server.DcmViewTagsServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DcmViewTagsServlet</servlet-name>
+		<url-pattern>/dcmtags/*</url-pattern>
+	</servlet-mapping>
+	
+	<!--  Просмотр вложения   -->
+	
+	<servlet>
+		<servlet-name>DcmViewAttachementServlet</servlet-name>
+		<servlet-class>org.psystems.dicom.browser.server.DcmViewAttachementServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DcmViewAttachementServlet</servlet-name>
+		<url-pattern>/dcmattach/*</url-pattern>
+	</servlet-mapping>
+	
+	<!--  Просмотр PDF-вложения   -->
+	
+	<servlet>
+		<servlet-name>DcmViewPDFServlet</servlet-name>
+		<servlet-class>org.psystems.dicom.browser.server.DcmViewPDFServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DcmViewPDFServlet</servlet-name>
+		<url-pattern>/dcmpdf/*</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************* -->
+	<!-- ***           СЕРВЛЕТЫ ДЛЯ OpenOffice         *** -->
+	<!-- ************************************************* -->
+
+	<!--   JSP-Servlet выдачи общей страницы    -->
+
+	<servlet>
+		<servlet-name>oostudy</servlet-name>
+		<jsp-file>/jsp/oostudy.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>oostudy</servlet-name>
+		<url-pattern>/oostudy/*</url-pattern>
+	</servlet-mapping>
+	
+	<!--  Получение openoffice шаблона   -->
+	
+	<servlet>
+		<servlet-name>DcmGetOOTemplateServlet</servlet-name>
+		<servlet-class>org.psystems.dicom.browser.server.DcmGetOOTemplateServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DcmGetOOTemplateServlet</servlet-name>
+		<url-pattern>/ootmpl/*</url-pattern>
+	</servlet-mapping>
+	
+	<!--  Получение PDF шаблона   -->
+	
+	<servlet>
+		<servlet-name>ManagePdfServlet</servlet-name>
+		<servlet-class>org.psystems.dicom.browser.server.ManagePdfServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ManagePdfServlet</servlet-name>
+		<url-pattern>/makepdf/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- ************************************************* -->
+	<!-- ***    СЕРВЛЕТЫ ОТОБРАЖЕНИЯ КАРТИНКИ В МИС     *** -->
+	<!-- ************************************************* -->
+
+	<!--   JSP-Servlet выдачи общей страницы    -->
+
+	<servlet>
+		<servlet-name>study</servlet-name>
+		<jsp-file>/jsp/Study.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>study</servlet-name>
+		<url-pattern>/study/*</url-pattern>
+	</servlet-mapping>
+
+	<!--   JSP-Servlet выдачи фрейма с картинкой    -->
+
+	<servlet>
+		<servlet-name>studyImage</servlet-name>
+		<jsp-file>/jsp/StudyImage.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>studyImage</servlet-name>
+		<url-pattern>/study/image/*</url-pattern>
+	</servlet-mapping>
+
+
+	<!-- ************************************************* -->
+	<!-- ***         СТАТИСТИЧЕСКИЕ СЕРВЛЕТЫ           *** -->
+	<!-- ************************************************* -->
+
+	<servlet>
+		<servlet-name>UseagStoreChartServlet</servlet-name>
+		<servlet-class>org.psystems.dicom.browser.server.stat.UseagStoreChartServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UseagStoreChartServlet</servlet-name>
+		<url-pattern>/stat/chart/usagestore/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>StatDailyLoadChartServlet</servlet-name>
+		<servlet-class>org.psystems.dicom.browser.server.stat.StatDailyLoadChartServlet2</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StatDailyLoadChartServlet</servlet-name>
+		<url-pattern>/stat/chart/dailyload/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>StatClientRequestsChartServlet</servlet-name>
+		<servlet-class>org.psystems.dicom.browser.server.stat.StatClientRequestsChartServlet2</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StatClientRequestsChartServlet</servlet-name>
+		<url-pattern>/stat/chart/clientreqs/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- ************************************************* -->
+	<!-- ***    СЕРВЛЕТЫ УПРАВЛЕНИЯ ИССЛЕДОВАНИЕМ      *** -->
+	<!-- ************************************************* -->
+
+	<servlet>
+		<servlet-name>manageStudyServlet</servlet-name>
+		<servlet-class>org.psystems.dicom.browser.server.ManageStudyServiceImpl</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>manageStudyServlet</servlet-name>
+		<url-pattern>/browser/managestudy</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>NewStudyServlet</servlet-name>
+		<servlet-class>org.psystems.dicom.browser.server.NewStudyServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>NewStudyServlet</servlet-name>
+		<url-pattern>/newstudy/upload</url-pattern>
+	</servlet-mapping>
+
+	<!-- ************************************************* -->
+	<!-- ***               Безопасность                *** -->
+	<!-- ************************************************* -->
+
+	
+
+</web-app>

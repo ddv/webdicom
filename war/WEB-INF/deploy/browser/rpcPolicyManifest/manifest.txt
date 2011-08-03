@@ -1,0 +1,6 @@
+# Module browser
+# RPC service class, partial path of RPC policy file
+org.psystems.dicom.browser.client.service.BrowserService, 79F8A9A4414C6E8BB7FAD9393257392F.gwt.rpc
+org.psystems.dicom.browser.client.service.ManageStydyService, EB85C42BDFF0E88BB8927385524EE08D.gwt.rpc
+org.psystems.dicom.browser.client.service.ItemSuggestService, 3EBBD670AB2BD7D5F241336C35B929DD.gwt.rpc
+org.psystems.dicom.browser.client.service.DicSuggestBoxService, 89037261013E829677C20CD7B72C675F.gwt.rpc

@@ -1,0 +1,264 @@
+/** Add css rules here for your application. */
+
+/* «аголовки */
+
+h1 {
+  font-size: 2em;
+  font-weight: bold;
+  color: #777777;
+  margin: 20px;
+  text-align: center;
+}
+
+
+/*h1 {
+	font-size: 16px;
+	font-weight: bold;
+	color: #08245b;
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
+*/
+
+h2 {
+	font-size: 15px;
+	font-weight: bold;
+	color: black;
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
+
+
+
+
+/*
+ стили дл€ блогов
+*/
+BODY { /*background-color: #F0F0F0;*/
+	background-color: #FFFFFF;
+	margin-top: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-bottom: 10px;
+	font-family: verdana, Sans-Serif;
+	font-size: 10pt;
+}
+
+
+P { /*background-color: #F0F0F0;*/
+	background-color: #FFFFFF;
+	margin-top: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-bottom: 10px;
+	font-family: verdana, Sans-Serif;
+	font-size: 10pt;
+}
+
+.copyright {
+  font-size: 1em;
+  /*font-weight: bold;*/
+  color: #777777;
+  margin-top: 20px;
+  text-align: center;
+}
+
+
+
+.copyright A:visited {
+  font-size: 1em;
+  /*font-weight: bold;*/
+  /*color: #B0CAFA;*/
+  color: #777777;
+  /*margin: 20px;*/
+  text-align: center;
+}
+
+.copyright A:link {
+  font-size: 1em;
+  /*font-weight: bold;*/
+  /*color: #44639C;*/
+  color: #44639C;
+  /*margin: 20px;*/
+  text-align: center;
+}
+
+
+/* ссылки */
+A:link {
+	color: #08245b;
+	text-decoration: none;
+}
+
+A:visited {
+	color: #08245b;
+	text-decoration: none;
+}
+
+A:active {
+	color: red;
+	text-decoration: none;
+}
+
+A:hover {
+	color: #666666;
+	text-decoration: underline;
+}
+
+A.selected {
+	color: blue;
+	text-decoration: none;
+}
+
+
+
+
+
+.msgPopupPanel {
+	/*border: 1px dotted yellow;*/
+	background: yellow;
+	color: black;
+	position: fixed;
+	opacity: 0.8;
+	filter: alpha(opacity = 80);
+	/*cursor: not-allowed;*/	
+}
+
+.msgPopupPanelItem {
+	margin: 5px;	
+}
+
+.GlassPanel {
+	background: black;
+	opacity: 0.2;
+	filter: alpha(opacity = 20);
+	cursor: not-allowed;
+	width: 100%;
+	height: 100%;
+}
+
+.Image {
+  margin: 10;
+  cursor: pointer;
+  cursor: hand;
+
+}
+
+.ImageGlassPanel {
+	background: black;
+	opacity: 0.2;
+	filter: alpha(opacity = 20);
+	cursor: not-allowed;
+	width: 100px;
+	height: 100px;
+}
+
+
+.DicomSuggestion {
+	font: 2.167em/ 118% normal Verdana, Tahoma, sans-serif;
+	margin: 5px;
+	/*color: #000000;*/
+	color: #44639C;	
+}
+
+.DicomSuggestionEmpty {
+	font: 2.167em/ 118% normal Verdana, Tahoma, sans-serif;
+	margin: 5px;
+	/*color: #000000;*/
+	color: #B0CAFA;	
+}
+
+.SearchToolButton {
+	font: 2.167em/ 118% normal Verdana, Tahoma, sans-serif;
+	margin: 5px;
+	/*color: #000000;*/
+	color: #44639C;	
+}
+
+
+.SearchItem {
+	margin: 15px;
+	/*width: 1000px;*/
+}
+
+.DicomItem {
+	font: 2.167em/ 118% normal Verdana, Tahoma, sans-serif;
+	margin: 5px;
+	color: #000000;
+	/*color: #44639C;*/	
+	cursor: pointer;
+  cursor: hand;
+}
+
+.DicomItemWarn {
+	color: red;
+}
+
+.DicomItemRemoved {
+	color: lightGray;
+}
+
+.DicomItemName {
+	font: 1.4em/ 78% normal Verdana, Tahoma, sans-serif;
+	margin: 2px;
+	color: #B0CAFA;	
+}
+
+.DicomItemValue {
+	font: 1.5em/ 78% normal Verdana, Tahoma, sans-serif;
+	margin: 2px;
+	color: #44639C;
+}
+
+/* ссылки */
+.DicomItemName A {
+	font: 1.2em/ 78% normal Verdana, Tahoma, sans-serif;
+	margin-bottom: 20px;
+	color: #44639C;
+	text-decoration: none;
+}
+
+
+.DicomItemName A:VISITED {
+	color: #B0CAFA;
+}
+
+.DicomItemName A:HOVER {
+	color: #44639C;
+	text-decoration: underline;
+}
+
+.StudyCard {
+	margin-bottom: 10px;
+	background: white;
+	width: 100%;
+}
+
+.StudyCardTitle {
+	font: 1.8em/ 118% normal Verdana, Tahoma, sans-serif;
+	margin: 5px;
+	color: #000000;
+	/*color: #44639C;*/	
+	cursor: pointer;
+  cursor: hand;
+  width: 100%;
+}
+
+
+
+.WorkListPanel {
+	background: white;
+}
+
+.WorkListPanelItem {
+	font: 12pt/10pt sans-serif;
+	/*font: 2.0 em/ 120% normal Verdana, Tahoma, sans-serif;*/
+}
+
+.LabelLink {
+	color: #0000AA;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+
