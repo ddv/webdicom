@@ -1,2 +1,0 @@
-serviceClass: org.psystems.dicom.browser.client.service.DicSuggestBoxService
-path: 89037261013E829677C20CD7B72C675F.gwt.rpc

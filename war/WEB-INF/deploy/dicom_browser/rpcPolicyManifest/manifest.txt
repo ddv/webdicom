@@ -1,2 +1,0 @@
-# Module dicom_browser
-# RPC service class, partial path of RPC policy file
