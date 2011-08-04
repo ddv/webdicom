@@ -1,0 +1,92 @@
+<project name="dicom-commons" default="distrib" basedir=".">
+
+	<target name="init">
+
+		<!-- Configure path to GWT SDK -->
+		 <property name="gwt.sdk" location="C:/eclipse/3.5/plugins/com.google.gwt.eclipse.sdkbundle.2.0.3_2.0.3.v201002191036/gwt-2.0.3" />
+		 
+		
+		<property name="extlib_dir" value="lib" />
+		<property name="source_dir" value="src" />
+		<property name="classes_dir" value="build" />
+		<property name="doc_dir" value="doc" />
+		<property name="doc_dir_api" value="${doc_dir}/api" />
+		<property name="dist_dir" value="distrib" />
+		<property name="dist_jar" value="dicom-commons.jar" />
+
+		<property name="dist_lib_dir" value="war/WEB-INF/lib" />		
+		<property name="log4j" value="${dist_lib_dir}/log4j-1.2.13.jar"/>
+		<property name="dcm4che-core" value="${dist_lib_dir}/dcm4che-core-2.0.21.jar"/>
+		<property name="dcm4che-net" value="${dist_lib_dir}/dcm4che-net-2.0.21.jar"/>
+		<property name="solr" value="${dist_lib_dir}/apache-solr-solrj-3.2.0.jar"/>
+		<property name="junit" value="${extlib_dir}/junit.jar "/>
+		
+		<path id="build.classpath">
+			<pathelement location="${gwt.sdk}/gwt-user.jar"/>
+			<fileset dir="${gwt.sdk}" includes="gwt-dev*.jar"/>
+			<pathelement location="${log4j}"/>
+			<pathelement location="${dcm4che-core}"/>
+			<pathelement location="${dcm4che-net}"/>
+			<pathelement location="${solr}"/>
+			<pathelement location="${junit}}"/>
+		</path>
+
+	</target>
+
+
+	<!-- clean -->
+	<target name="clean" depends="init">
+		<delete dir="${classes_dir}" />
+	</target>
+
+	<!-- prepare -->
+	<target name="prepare" depends="clean">
+		<mkdir dir="${classes_dir}" />
+	</target>
+
+	<!-- compile -->
+	<target name="compile" depends="prepare">
+		<!-- javac srcdir="${source_dir}" destdir="${classes_dir}" debug="on" encoding="UTF-8" -->
+		<javac srcdir="${source_dir}" destdir="${classes_dir}" debug="on" nowarn="on" encoding="UTF-8" >
+			<classpath refid="build.classpath" />
+			<include name="org/psystems/dicom/commons/orm/**"/>
+			<include name="org/psystems/dicom/commons/solr/**"/>
+			<exclude name="test*/*"/>
+			<exclude name="**/*Test.java"/>
+		</javac>
+	</target>
+
+
+
+	<!-- distrib -->
+	<target name="distrib" depends="compile">
+
+
+		<tstamp>
+			<format property="today" pattern="yyyy/MM/dd HH:mm:ss" locale="en"/>
+		</tstamp>
+
+
+		<jar destfile="${dist_dir}/${dist_jar}" basedir="${classes_dir}">
+			<manifest>
+				<attribute name="Build-By" value="${user.name}"/>
+				<attribute name="Build-Number" value="${revision.max}"/>
+
+				<section name="common">
+					<attribute name="Specification-Title" value="Webdicom Archive"/>
+					<attribute name="Specification-Version" value="${today}"/>
+					<attribute name="Specification-Vendor" value="psystems.org"/>
+				</section>
+			</manifest>
+			<exclude name="**/*Test*"/>
+		</jar>
+		<delete dir="${classes_dir}" />
+
+	</target>
+
+
+
+
+
+</project>
+
