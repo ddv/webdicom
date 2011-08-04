@@ -36,7 +36,7 @@ public class PersistentManagerDerbyTest extends TestCase {
 		super.setUp();
 
 		connection = DriverManager.getConnection("jdbc:derby:" + dbPath
-				+ ";create=true;drop=true");
+				+ ";create=true");
 		FileInputStream sqlInput = new FileInputStream(
 				"../dicom-archive/database/derby/db.sql");
 
@@ -52,7 +52,7 @@ public class PersistentManagerDerbyTest extends TestCase {
 				"UTF-8");
 
 		connection = DriverManager.getConnection("jdbc:derby:" + dbPath
-				+ ";create=true;drop=true");
+				+ ";create=true");
 
 	}
 
