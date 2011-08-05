@@ -125,7 +125,8 @@ public class DicSuggestBoxServiceImpl extends RemoteServiceServlet implements Di
 			    proxy.setDiagnosisCode(diaBean.getDiagnosisCode());
 			    proxy.setDiagnosisDescription(diaBean.getDiagnosisDescription());
 	
-			    ItemSuggestion item = new ItemSuggestion("ищем " + proxy.getDiagnosisDescription() + "...", proxy
+			    ItemSuggestion item = new ItemSuggestion(proxy
+				    .getDiagnosisCode().toUpperCase() + " " +proxy.getDiagnosisDescription() + "...", proxy
 				    .getDiagnosisCode().toUpperCase());
 			    item.setEvent(proxy);
 			    suggestions.add(item);
