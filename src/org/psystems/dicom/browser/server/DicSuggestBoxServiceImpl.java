@@ -74,6 +74,7 @@ import org.psystems.dicom.browser.client.proxy.ServiceProxy;
 import org.psystems.dicom.browser.client.proxy.SuggestTransactedResponse;
 import org.psystems.dicom.browser.client.service.DicSuggestBoxService;
 import org.psystems.dicom.commons.solr.entity.Diagnosis;
+import org.psystems.dicom.commons.solr.entity.Employee;
 
 import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
@@ -158,17 +159,45 @@ public class DicSuggestBoxServiceImpl extends RemoteServiceServlet implements Di
 		}
 	    } else if (dicName.equals("doctors")) {
 
-		for (int i = 0; i < 10; i++) {
-		    EmployeeProxy proxy = new EmployeeProxy();
-		    proxy.setEmployeeName(req.getQuery().toUpperCase() + i);
-		    proxy.setEmployeeCode("CODE" + i);
-		    proxy.setEmployeeType(EmployeeProxy.TYPE_DOCTOR);
+//		System.out.println("!!!! searche doctors....");
+		SolrQuery query = new SolrQuery();
+		query.setQuery("dicName:employee");
+		//employeeType employeeCode employeeName
+		query.setFilterQueries("employeeName:" + req.getQuery().toUpperCase() + "*");
+		query.setRows(20);
+//		query.setFields("diagnosisCode,diagnosisDescription");
+//		query.addSortField("diagnosisCode", SolrQuery.ORDER.asc);
+		QueryResponse rsp;
 
-		    ItemSuggestion item = new ItemSuggestion("ищем " + proxy.getEmployeeName() + "...", proxy
+		rsp = server.query(query);
+		
+
+		List<Employee> beans = rsp.getBeans(Employee.class);
+		for (Employee emp : beans) {
+		    
+//		    System.out.println("!!! emp="+emp);
+		    EmployeeProxy proxy = new EmployeeProxy();
+		    proxy.setEmployeeName(emp.getEmployeeName());
+		    proxy.setEmployeeCode(emp.getEmployeeCode());
+		    proxy.setEmployeeType(emp.getEmployeeType());
+
+		    ItemSuggestion item = new ItemSuggestion(proxy.getEmployeeCode()+
+			    " " + proxy.getEmployeeName(), proxy
 			    .getEmployeeName().toUpperCase());
 		    item.setEvent(proxy);
 		    suggestions.add(item);
 		}
+//		for (int i = 0; i < 10; i++) {
+//		    EmployeeProxy proxy = new EmployeeProxy();
+//		    proxy.setEmployeeName(req.getQuery().toUpperCase() + i);
+//		    proxy.setEmployeeCode("CODE" + i);
+//		    proxy.setEmployeeType(EmployeeProxy.TYPE_DOCTOR);
+//
+//		    ItemSuggestion item = new ItemSuggestion("ищем " + proxy.getEmployeeName() + "...", proxy
+//			    .getEmployeeName().toUpperCase());
+//		    item.setEvent(proxy);
+//		    suggestions.add(item);
+//		}
 	    } else if (dicName.equals("operators")) {
 
 		for (int i = 0; i < 10; i++) {
