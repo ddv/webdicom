@@ -96,22 +96,22 @@ public class DicSuggestBoxServiceImpl extends RemoteServiceServlet implements Di
 	// Create a list to hold our suggestions (pre-set the lengthto the limit
 	// specified by the request)
 
-	
 	List<Suggestion> suggestions = new ArrayList<Suggestion>();
 
 	try {
 
 	    SolrServer server = new CommonsHttpSolrServer("http://localhost:8983/solr");
-	
-	// передача будет в бинарном формате
-	((CommonsHttpSolrServer) server).setRequestWriter(new BinaryRequestWriter());
+
+	    // передача будет в бинарном формате
+	    ((CommonsHttpSolrServer) server).setRequestWriter(new BinaryRequestWriter());
 
 	    // getServletContext(), req.getQuery(), req.getLimit()
 	    if (dicName.equals("diagnosis")) {
 
 		SolrQuery query = new SolrQuery();
 		query.setQuery("dicName:diagnosis");
-		query.setFilterQueries("diagnosisCode:" + req.getQuery().toUpperCase() + "*");
+		query.setFilterQueries("diagnosisCode:" + req.getQuery().toUpperCase() + "* OR diagnosisDescription:"
+			+ req.getQuery().toLowerCase() + "*");
 		query.setRows(20);
 		query.setFields("diagnosisCode,diagnosisDescription");
 		query.addSortField("diagnosisCode", SolrQuery.ORDER.asc);
@@ -119,30 +119,30 @@ public class DicSuggestBoxServiceImpl extends RemoteServiceServlet implements Di
 
 		rsp = server.query(query);
 
-
 		List<Diagnosis> beans = rsp.getBeans(Diagnosis.class);
 		for (Diagnosis diaBean : beans) {
-			    DiagnosisProxy proxy = new DiagnosisProxy();
-			    proxy.setDiagnosisCode(diaBean.getDiagnosisCode());
-			    proxy.setDiagnosisDescription(diaBean.getDiagnosisDescription());
-	
-			    ItemSuggestion item = new ItemSuggestion(proxy
-				    .getDiagnosisCode().toUpperCase() + " " +proxy.getDiagnosisDescription() + "...", proxy
-				    .getDiagnosisCode().toUpperCase());
-			    item.setEvent(proxy);
-			    suggestions.add(item);
+		    DiagnosisProxy proxy = new DiagnosisProxy();
+		    proxy.setDiagnosisCode(diaBean.getDiagnosisCode());
+		    proxy.setDiagnosisDescription(diaBean.getDiagnosisDescription());
+
+		    ItemSuggestion item = new ItemSuggestion(proxy.getDiagnosisCode().toUpperCase() + " "
+			    + proxy.getDiagnosisDescription() + "...", proxy.getDiagnosisCode().toUpperCase());
+		    item.setEvent(proxy);
+		    suggestions.add(item);
 		}
 
-//		for (int i = 0; i < 10; i++) {
-//		    DiagnosisProxy proxy = new DiagnosisProxy();
-//		    proxy.setDiagnosisCode(req.getQuery() + i);
-//		    proxy.setDiagnosisDescription(req.getQuery() + i + " Диагноз тестовый");
-//
-//		    ItemSuggestion item = new ItemSuggestion("ищем " + proxy.getDiagnosisDescription() + "...", proxy
-//			    .getDiagnosisCode().toUpperCase());
-//		    item.setEvent(proxy);
-//		    suggestions.add(item);
-//		}
+		// for (int i = 0; i < 10; i++) {
+		// DiagnosisProxy proxy = new DiagnosisProxy();
+		// proxy.setDiagnosisCode(req.getQuery() + i);
+		// proxy.setDiagnosisDescription(req.getQuery() + i +
+		// " Диагноз тестовый");
+		//
+		// ItemSuggestion item = new ItemSuggestion("ищем " +
+		// proxy.getDiagnosisDescription() + "...", proxy
+		// .getDiagnosisCode().toUpperCase());
+		// item.setEvent(proxy);
+		// suggestions.add(item);
+		// }
 	    } else if (dicName.equals("services")) {
 
 		for (int i = 0; i < 10; i++) {
@@ -159,58 +159,85 @@ public class DicSuggestBoxServiceImpl extends RemoteServiceServlet implements Di
 		}
 	    } else if (dicName.equals("doctors")) {
 
-//		System.out.println("!!!! searche doctors....");
+		// System.out.println("!!!! searche doctors....");
 		SolrQuery query = new SolrQuery();
 		query.setQuery("dicName:employee");
-		//employeeType employeeCode employeeName
-		query.setFilterQueries("employeeName:" + req.getQuery().toUpperCase() + "*");
+		// employeeType employeeCode employeeName
+		query.setFilterQueries("employeeName:" + req.getQuery().toLowerCase() + "* OR employeeCode:CODE"
+			+ req.getQuery().toLowerCase() + "*");
 		query.setRows(20);
-//		query.setFields("diagnosisCode,diagnosisDescription");
-//		query.addSortField("diagnosisCode", SolrQuery.ORDER.asc);
+		// query.setFields("diagnosisCode,diagnosisDescription");
+		// query.addSortField("diagnosisCode", SolrQuery.ORDER.asc);
 		QueryResponse rsp;
 
 		rsp = server.query(query);
-		
 
 		List<Employee> beans = rsp.getBeans(Employee.class);
 		for (Employee emp : beans) {
-		    
-//		    System.out.println("!!! emp="+emp);
+
+		    // System.out.println("!!! emp="+emp);
 		    EmployeeProxy proxy = new EmployeeProxy();
 		    proxy.setEmployeeName(emp.getEmployeeName());
 		    proxy.setEmployeeCode(emp.getEmployeeCode());
 		    proxy.setEmployeeType(emp.getEmployeeType());
 
-		    ItemSuggestion item = new ItemSuggestion(proxy.getEmployeeCode()+
-			    " " + proxy.getEmployeeName(), proxy
-			    .getEmployeeName().toUpperCase());
+		    ItemSuggestion item = new ItemSuggestion(proxy.getEmployeeCode() + " " + proxy.getEmployeeName(),
+			    proxy.getEmployeeName().toUpperCase());
 		    item.setEvent(proxy);
 		    suggestions.add(item);
 		}
-//		for (int i = 0; i < 10; i++) {
-//		    EmployeeProxy proxy = new EmployeeProxy();
-//		    proxy.setEmployeeName(req.getQuery().toUpperCase() + i);
-//		    proxy.setEmployeeCode("CODE" + i);
-//		    proxy.setEmployeeType(EmployeeProxy.TYPE_DOCTOR);
-//
-//		    ItemSuggestion item = new ItemSuggestion("ищем " + proxy.getEmployeeName() + "...", proxy
-//			    .getEmployeeName().toUpperCase());
-//		    item.setEvent(proxy);
-//		    suggestions.add(item);
-//		}
+		// for (int i = 0; i < 10; i++) {
+		// EmployeeProxy proxy = new EmployeeProxy();
+		// proxy.setEmployeeName(req.getQuery().toUpperCase() + i);
+		// proxy.setEmployeeCode("CODE" + i);
+		// proxy.setEmployeeType(EmployeeProxy.TYPE_DOCTOR);
+		//
+		// ItemSuggestion item = new ItemSuggestion("ищем " +
+		// proxy.getEmployeeName() + "...", proxy
+		// .getEmployeeName().toUpperCase());
+		// item.setEvent(proxy);
+		// suggestions.add(item);
+		// }
 	    } else if (dicName.equals("operators")) {
 
-		for (int i = 0; i < 10; i++) {
-		    EmployeeProxy proxy = new EmployeeProxy();
-		    proxy.setEmployeeName(req.getQuery().toUpperCase() + i);
-		    proxy.setEmployeeCode("CODE" + i);
-		    proxy.setEmployeeType(EmployeeProxy.TYPE_OPERATOR);
+		SolrQuery query = new SolrQuery();
+		query.setQuery("dicName:employee");
+		// employeeType employeeCode employeeName
+		query.setFilterQueries("employeeName:" + req.getQuery().toLowerCase() + "*");
+		query.setRows(20);
+		// query.setFields("diagnosisCode,diagnosisDescription");
+		// query.addSortField("diagnosisCode", SolrQuery.ORDER.asc);
+		QueryResponse rsp;
 
-		    ItemSuggestion item = new ItemSuggestion("ищем " + proxy.getEmployeeName() + "...", proxy
-			    .getEmployeeName().toUpperCase());
+		rsp = server.query(query);
+
+		List<Employee> beans = rsp.getBeans(Employee.class);
+		for (Employee emp : beans) {
+
+		    // System.out.println("!!! emp="+emp);
+		    EmployeeProxy proxy = new EmployeeProxy();
+		    proxy.setEmployeeName(emp.getEmployeeName());
+		    proxy.setEmployeeCode(emp.getEmployeeCode());
+		    proxy.setEmployeeType(emp.getEmployeeType());
+
+		    ItemSuggestion item = new ItemSuggestion(proxy.getEmployeeCode() + " " + proxy.getEmployeeName(),
+			    proxy.getEmployeeName().toUpperCase());
 		    item.setEvent(proxy);
 		    suggestions.add(item);
 		}
+
+		// for (int i = 0; i < 10; i++) {
+		// EmployeeProxy proxy = new EmployeeProxy();
+		// proxy.setEmployeeName(req.getQuery().toUpperCase() + i);
+		// proxy.setEmployeeCode("CODE" + i);
+		// proxy.setEmployeeType(EmployeeProxy.TYPE_OPERATOR);
+		//
+		// ItemSuggestion item = new ItemSuggestion("ищем " +
+		// proxy.getEmployeeName() + "...", proxy
+		// .getEmployeeName().toUpperCase());
+		// item.setEvent(proxy);
+		// suggestions.add(item);
+		// }
 	    } else if (dicName.equals("devices")) {
 
 		for (int i = 0; i < 10; i++) {
