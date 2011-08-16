@@ -75,6 +75,7 @@ import org.psystems.dicom.browser.client.proxy.SuggestTransactedResponse;
 import org.psystems.dicom.browser.client.service.DicSuggestBoxService;
 import org.psystems.dicom.commons.solr.entity.Diagnosis;
 import org.psystems.dicom.commons.solr.entity.Employee;
+import org.psystems.dicom.commons.solr.entity.Service;
 
 import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
@@ -144,19 +145,45 @@ public class DicSuggestBoxServiceImpl extends RemoteServiceServlet implements Di
 		// suggestions.add(item);
 		// }
 	    } else if (dicName.equals("services")) {
+		
+		SolrQuery query = new SolrQuery();
+		query.setQuery("dicName:service");
+		query.setFilterQueries("serviceCode:" + req.getQuery().toUpperCase() + "* OR serviceAlias:"
+			+ req.getQuery().toLowerCase() + "* OR serviceDescription:"
+			+ req.getQuery().toLowerCase() + "*");
+		query.setRows(20);
+		query.setFields("serviceCode,serviceAlias,serviceDescription");
+		query.addSortField("serviceCode", SolrQuery.ORDER.asc);
+		QueryResponse rsp;
 
-		for (int i = 0; i < 10; i++) {
+		rsp = server.query(query);
+
+		List<Service> beans = rsp.getBeans(Service.class);
+		for (Service srvBean : beans) {
 		    ServiceProxy proxy = new ServiceProxy();
-		    proxy.setServiceCode(req.getQuery() + i);
-		    proxy.setServiceAlias("alias" + i);
-		    proxy.setServiceDescription(req.getQuery() + i + " услуга тестовая");
-		    proxy.setServiceCount(1);
+		    proxy.setServiceAlias(srvBean.getServiceAlias());
+		    proxy.setServiceCode(srvBean.getServiceCode());
+		    proxy.setServiceDescription(srvBean.getServiceDescription());
 
-		    ItemSuggestion item = new ItemSuggestion("ищем " + proxy.getServiceDescription() + "...", proxy
-			    .getServiceCode().toUpperCase());
+		    ItemSuggestion item = new ItemSuggestion(proxy.getServiceCode().toUpperCase() + " "
+			    + proxy.getServiceAlias() + " - " + proxy.getServiceDescription() + "...", proxy.getServiceCode().toUpperCase());
 		    item.setEvent(proxy);
 		    suggestions.add(item);
 		}
+
+
+//		for (int i = 0; i < 10; i++) {
+//		    ServiceProxy proxy = new ServiceProxy();
+//		    proxy.setServiceCode(req.getQuery() + i);
+//		    proxy.setServiceAlias("alias" + i);
+//		    proxy.setServiceDescription(req.getQuery() + i + " услуга тестовая");
+//		    proxy.setServiceCount(1);
+//
+//		    ItemSuggestion item = new ItemSuggestion("ищем " + proxy.getServiceDescription() + "...", proxy
+//			    .getServiceCode().toUpperCase());
+//		    item.setEvent(proxy);
+//		    suggestions.add(item);
+//		}
 	    } else if (dicName.equals("doctors")) {
 
 		// System.out.println("!!!! searche doctors....");
